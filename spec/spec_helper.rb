@@ -1,3 +1,5 @@
+require File.expand_path("../../mrdate", __FILE__)
+
 require "rubygems"
 require "bacon"
 
