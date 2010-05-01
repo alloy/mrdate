@@ -8,32 +8,32 @@ describe :date_civil, :shared => true do
     d.jd.should      == 0
   end
 
-  # it "creates a date with arguments" do
-  #   d = MRDate.send(@method, 2000, 3, 5)
-  #   d.year.should    == 2000
-  #   d.month.should   == 3
-  #   d.day.should     == 5
-  #   d.julian?.should == false
-  #   d.jd.should      == 2451609
-  # 
-  #   # Should also work with years far in the past and future
-  # 
-  #   d = MRDate.send(@method, -9000, 7, 5)
-  #   d.year.should    == -9000
-  #   d.month.should   == 7
-  #   d.day.should     == 5
-  #   d.julian?.should == true
-  #   d.jd.should      == -1566006
-  # 
-  #   d = MRDate.send(@method, 9000, 10, 14)
-  #   d.year.should    == 9000
-  #   d.month.should   == 10
-  #   d.day.should     == 14
-  #   d.julian?.should == false
-  #   d.jd.should      == 5008529
-  # 
-  # end
-  # 
+  it "creates a date with arguments" do
+    d = MRDate.send(@method, 2000, 3, 5)
+    d.year.should    == 2000
+    d.month.should   == 3
+    d.day.should     == 5
+    d.julian?.should == false
+    d.jd.should      == 2451609
+
+    # Should also work with years far in the past and future
+
+    d = MRDate.send(@method, -9000, 7, 5)
+    d.year.should    == -9000
+    d.month.should   == 7
+    d.day.should     == 5
+    d.julian?.should == true
+    d.jd.should      == -1566006
+
+    d = MRDate.send(@method, 9000, 10, 14)
+    d.year.should    == 9000
+    d.month.should   == 10
+    d.day.should     == 14
+    d.julian?.should == false
+    d.jd.should      == 5008529
+
+  end
+
   # it "doesn't create dates for invalid arguments" do
   #   lambda { MRDate.send(@method, 2000, 13, 31) }.should raise_error(ArgumentError)
   #   lambda { MRDate.send(@method, 2000, 12, 32) }.should raise_error(ArgumentError)
