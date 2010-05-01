@@ -53,18 +53,29 @@ class MRDate < NSDate
   # Implementation
   #
   
+  # conform to the rubyspecs, don't wrap around
   def self.new(year = -4712, month = 1, day = 1, sg = ITALY)
-    # p year, month, day
+    # we can catch this here already
+    raise ArgumentError, "invalid date" if month > 12
     
     components = NSDateComponents.new
     components.year = year
     components.month = month
     components.day = day
     
-    interval = GREGORIAN_CALENDAR.dateFromComponents(components).timeIntervalSinceReferenceDate
-    date = alloc.initWithTimeIntervalSinceReferenceDate(interval)
-    date.sg = sg
-    date
+    # TODO: check when this can return `nil' instead of a date
+    date = GREGORIAN_CALENDAR.dateFromComponents(components)
+    interval = date.timeIntervalSinceReferenceDate
+    
+    mrdate = alloc.initWithTimeIntervalSinceReferenceDate(interval)
+    mrdate.sg = sg
+    
+    # no positive wrap around!
+    if mrdate.day < day && (mrdate.month == (month + 1) % 12)
+      raise ArgumentError, "invalid date"
+    end
+    
+    mrdate
   end
   
   attr_accessor :sg
