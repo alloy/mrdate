@@ -23,6 +23,7 @@ class MRDate < NSDate
   # The Julian Day Number of the Day of Calendar Reform for England
   # and her Colonies.
   # ENGLAND   = 2361222 # 1752-09-14
+  ENGLAND = JULIAN_DAY_FORMATTER.dateFromString("2361222").timeIntervalSinceReferenceDate # 1752-09-14
   
   ##
   #
@@ -53,29 +54,40 @@ class MRDate < NSDate
   # Implementation
   #
   
-  # conform to the rubyspecs, don't wrap around
-  def self.new(year = -4712, month = 1, day = 1, sg = ITALY)
-    # we can catch this here already
-    raise ArgumentError, "invalid date" if month > 12
-    
-    components = NSDateComponents.new
-    components.year = year
-    components.month = month
-    components.day = day
-    
-    # TODO: check when this can return `nil' instead of a date
-    date = GREGORIAN_CALENDAR.dateFromComponents(components)
-    interval = date.timeIntervalSinceReferenceDate
-    
-    mrdate = alloc.initWithTimeIntervalSinceReferenceDate(interval)
-    mrdate.sg = sg
-    
-    # no positive wrap around!
-    if mrdate.day < day && (mrdate.month == (month + 1) % 12)
-      raise ArgumentError, "invalid date"
+  class << self
+    def valid_civil?(year, month, day, sg = ITALY)
+      case sg
+      when ITALY
+        year >= 1582 && month >= 10 && day >= 15
+      end
     end
     
-    mrdate
+    # conform to the rubyspecs, don't wrap around
+    def new(year = -4712, month = 1, day = 1, sg = ITALY)
+      # we can catch this here already
+      raise ArgumentError, "invalid date" if month > 12
+      
+      components = NSDateComponents.new
+      components.year = year
+      components.month = month
+      components.day = day
+      
+      # TODO: check when this can return `nil' instead of a date
+      date = GREGORIAN_CALENDAR.dateFromComponents(components)
+      interval = date.timeIntervalSinceReferenceDate
+      
+      mrdate = alloc.initWithTimeIntervalSinceReferenceDate(interval)
+      mrdate.sg = sg
+      
+      # no positive wrap around!
+      if mrdate.day < day && (mrdate.month == (month + 1) % 12)
+        raise ArgumentError, "invalid date"
+      end
+      
+      mrdate
+    end
+    
+    alias_method :civil, :new
   end
   
   attr_accessor :sg
@@ -97,6 +109,7 @@ class MRDate < NSDate
     JULIAN_DAY_FORMATTER.stringFromDate(self).to_i
   end
   
+  # returns the julian day if it's a date before the specified calendar reform date
   def julian?
     timeIntervalSinceReferenceDate < @sg
   end
