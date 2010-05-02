@@ -134,6 +134,19 @@ module MRDateAPI
     end
   end
   
+  # Compare this date with another date.
+  #
+  # +other+ can also be a Numeric value, in which case it is
+  # interpreted as an Astronomical Julian Day Number.
+  def <=>(x)
+    case x
+    when Numeric
+      jd.compare(x)
+    when NSDate
+      compare(x)
+    end
+  end
+  
   def year
     components.era == MRDate::BC ? -(components.year - 1) : components.year
   end
