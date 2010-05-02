@@ -221,6 +221,8 @@ module MRDateAPI
     components.weekday - 1
   end
   
+  private # private time methods, for strftime
+  
   def hour
     components.hour
   end
@@ -234,6 +236,8 @@ module MRDateAPI
     components.second
   end
   alias_method :sec, :second
+  
+  public
   
   # TODO: lazy bastard
   def jd
@@ -296,8 +300,8 @@ module MRDateAPI
   # end
   
   def to_s
-    # "#{year}-#{month}-#{day}"
-    strftime
+    # TODO this breaks the minus spec: strftime
+    format "#{year}-%02d-%02d", month, day
   end
   
   def inspect
