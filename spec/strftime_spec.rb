@@ -2,10 +2,10 @@ require File.expand_path('../spec_helper', __FILE__)
 
 describe "MRDate#strftime" do
 
-  # it "should be able to print the date" do
-  #   MRDate.civil(2000, 4, 6).strftime.should == "2000-04-06"
-  #   MRDate.civil(2000, 4, 6).strftime.should == MRDate.civil(2000, 4, 6).to_s
-  # end
+  it "should be able to print the date" do
+    MRDate.civil(2000, 4, 6).strftime.should == "2000-04-06"
+    MRDate.civil(2000, 4, 6).strftime.should == MRDate.civil(2000, 4, 6).to_s
+  end
 
   it "should be able to print the full day name" do
     MRDate.civil(2000, 4, 6).strftime("%A").should == "Thursday"
@@ -21,13 +21,13 @@ describe "MRDate#strftime" do
   
   it "should be able to print the short month name" do
     MRDate.civil(2000, 4, 6).strftime("%b").should == "Apr"
-    # MRDate.civil(2000, 4, 6).strftime("%h").should == "Apr"
-    # MRDate.civil(2000, 4, 6).strftime("%b").should == MRDate.civil(2000, 4, 6).strftime("%h")
+    MRDate.civil(2000, 4, 6).strftime("%h").should == "Apr"
+    MRDate.civil(2000, 4, 6).strftime("%b").should == MRDate.civil(2000, 4, 6).strftime("%h")
   end
   
-  # it "should be able to print the century" do
-  #   MRDate.civil(2000, 4, 6).strftime("%C").should == "20"
-  # end
+  it "should be able to print the century" do
+    MRDate.civil(2000, 4, 6).strftime("%C").should == "20"
+  end
   
   it "should be able to print the month day with leading zeroes" do
     MRDate.civil(2000, 4, 6).strftime("%d").should == "06"
@@ -36,6 +36,9 @@ describe "MRDate#strftime" do
   # it "should be able to print the month day with leading spaces" do
   #   MRDate.civil(2000, 4, 6).strftime("%e").should == " 6"
   # end
+  it "should be able to print the month day without leading zeroes" do
+    MRDate.civil(2000, 4, 6).strftime("%e").should == "6"
+  end
   
   # it "should be able to print the commercial year with leading zeroes" do
   #   MRDate.civil(2000, 4, 6).strftime("%G").should == "2000"
@@ -75,9 +78,9 @@ describe "MRDate#strftime" do
     MRDate.civil(2000, 4, 6).strftime("%m").should == "04"
   end
   
-  # it "should be able to add a newline" do
-  #   MRDate.civil(2000, 4, 6).strftime("%n").should == "\n"
-  # end
+  it "should be able to add a newline" do
+    MRDate.civil(2000, 4, 6).strftime("%n").should == "\n"
+  end
   
   # it "should be able to show AM/PM" do
   #   MRDate.civil(2000, 4, 6).strftime("%P").should == "am"
@@ -99,9 +102,9 @@ describe "MRDate#strftime" do
   #   MRDate.civil(2000, 4, 6).strftime("%s").should == "954979200"
   # end
   
-  # it "should be able to add a tab" do
-  #   MRDate.civil(2000, 4, 6).strftime("%t").should == "\t"
-  # end
+  it "should be able to add a tab" do
+    MRDate.civil(2000, 4, 6).strftime("%t").should == "\t"
+  end
   
   # it "should be able to show the week number with the week starting on sunday and monday" do
   #   MRDate.civil(2000, 4, 6).strftime("%U").should == "14"

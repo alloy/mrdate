@@ -240,11 +240,27 @@ module MRDateAPI
   #
   
   def strftime(format = '%F')
+    format = format.gsub(/%(C|F|h|n|t)/) do
+      case $1
+      when 'C'
+        year / 100
+      when 'h'
+        '%b'
+      when 'F'
+        '%Y-%m-%d'
+      when 'n'
+        "\n"
+      when 't'
+        "\t"
+      end
+    end
+    # p format
+    
     descriptionWithCalendarFormat(format, timeZone: nil, locale: nil)
   end
   
   def to_s
-    "#{year}-#{month}-#{day}"
+    strftime
   end
   
   def inspect
