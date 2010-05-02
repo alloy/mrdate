@@ -234,6 +234,15 @@ module MRDateAPI
   #   jd.hash
   # end
   
+  ##
+  #
+  # String methods
+  #
+  
+  def strftime(format = '%F')
+    descriptionWithCalendarFormat(format, timeZone: nil, locale: nil)
+  end
+  
   def to_s
     "#{year}-#{month}-#{day}"
   end
