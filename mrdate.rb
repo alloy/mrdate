@@ -145,6 +145,16 @@ module MRDateAPI
     date_with_offset(x, :day)
   end
   
+  # Return a new Date object that is +n+ months earlier than
+  # the current one.
+  #
+  # If the day-of-the-month of the current Date is greater
+  # than the last day of the target month, the day-of-the-month
+  # of the returned Date will be the last day of the target month.
+  def <<(n)
+    date_with_offset(-n, :month)
+  end
+  
   # Return a new Date object that is +n+ months later than
   # the current one.
   #
@@ -218,6 +228,11 @@ module MRDateAPI
   def downto(min, &block) # :yield: date
     step(min, -1, &block)
   end
+  
+  # TODO: Not sure what hash is being returned by MacRuby, but it seems to work already...
+  # def hash
+  #   jd.hash
+  # end
   
   def to_s
     "#{year}-#{month}-#{day}"
