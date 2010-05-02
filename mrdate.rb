@@ -110,12 +110,28 @@ module MRDateAPI
   end
   alias_method :==, :eql?
   
-  def -(days)
-    raise TypeError, "expected numeric or date" unless days.is_a?(Numeric)
-    
-    offset = NSDateComponents.new
-    offset.day = -days
-    calendar.dateByAddingComponents(offset, toDate: self, options: 0)
+  # If +x+ is a Numeric value, create a new Date object that is
+  # +x+ days earlier than the current one.
+  #
+  # If +x+ is a Date, return the number of days between the
+  # two dates; or, more precisely, how many days later the current
+  # date is than +x+.
+  #
+  # If +x+ is neither Numeric nor a Date, a TypeError is raised.
+  def -(x)
+    case x
+    when Numeric
+      offset = NSDateComponents.new
+      offset.day = -x
+      calendar.dateByAddingComponents(offset, toDate: self, options: 0)
+      
+    when NSDate
+      components = calendar.components(NSDayCalendarUnit, fromDate: x, toDate: self, options: 0)
+      components.day
+      
+    else
+      raise TypeError, "expected numeric or date"
+    end
   end
   
   def year
