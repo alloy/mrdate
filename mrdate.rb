@@ -58,8 +58,11 @@ class MRDate < NSDate
     def valid_civil?(year, month, day, sg = ITALY)
       case sg
       when ITALY
+        # In 1582 in Italy, 4th October was followed by 15th October, skipping 10 days.
         !(year == 1582 && month == 10 && day > 4 && day < 15)
       when ENGLAND
+        # In 1752 in England, 2nd September was followed by 14th September, skipping 11 days.
+        # !(year == 1752 && month == 9 && day > 2 && day < 14)
         raise "not dealing with any other reform date than ITALY yet"
       end
     end
