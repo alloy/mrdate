@@ -121,9 +121,7 @@ module MRDateAPI
   def -(x)
     case x
     when Numeric
-      offset = NSDateComponents.new
-      offset.day = -x
-      calendar.dateByAddingComponents(offset, toDate: self, options: 0)
+      self + -x
       
     when NSDate
       components = calendar.components(NSDayCalendarUnit, fromDate: x, toDate: self, options: 0)
@@ -131,6 +129,25 @@ module MRDateAPI
       
     else
       raise TypeError, "expected numeric or date"
+    end
+  end
+  
+  # Return a new Date object that is +n+ days later than the
+  # current one.
+  #
+  # +n+ may be a negative value, in which case the new Date
+  # is earlier than the current one; however, #-() might be
+  # more intuitive.
+  #
+  # If +n+ is not a Numeric, a TypeError will be thrown.  In
+  # particular, two Dates cannot be added to each other.
+  def +(x)
+    if x.is_a?(Numeric)
+      offset = NSDateComponents.new
+      offset.day = x
+      calendar.dateByAddingComponents(offset, toDate: self, options: 0)
+    else
+      raise TypeError, "expected numeric"
     end
   end
   
