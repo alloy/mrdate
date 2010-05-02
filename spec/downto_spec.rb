@@ -1,5 +1,4 @@
-require 'date' 
-require File.expand_path('../../../spec_helper', __FILE__)
+require File.expand_path('../spec_helper', __FILE__)
 
 describe "MRDate#downto" do
 
@@ -7,7 +6,7 @@ describe "MRDate#downto" do
     ds    = MRDate.civil(2000, 4, 14)
     de    = MRDate.civil(2000, 3, 29)
     count = 0
-    ds.step(de, -1) do |d|
+    ds.downto(de) do |d|
       d.should <= ds
       d.should >= de
       count += 1

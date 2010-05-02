@@ -103,6 +103,8 @@ class MRDate < NSDate
 end
 
 module MRDateAPI
+  include Comparable
+  
   attr_accessor :sg
   
   def eql?(other)
@@ -178,14 +180,6 @@ module MRDateAPI
     components.day
   end
   
-  def to_s
-    "#{year}-#{month}-#{day}"
-  end
-  
-  def inspect
-    "#<#{self.class.name} #{to_s}>"
-  end
-  
   # TODO: lazy bastard
   def jd
     MRDate::JULIAN_DAY_FORMATTER.stringFromDate(self).to_i
@@ -194,6 +188,43 @@ module MRDateAPI
   # returns the julian day if it's a date before the specified calendar reform date
   def julian?
     timeIntervalSinceReferenceDate < @sg
+  end
+  
+  # Step the current date forward +step+ days at a
+  # time (or backward, if +step+ is negative) until
+  # we reach +limit+ (inclusive), yielding the resultant
+  # date at each step.
+  def step(limit, step = 1)
+    # unless block_given?
+    #   return to_enum(:step, limit, step)
+    # end
+    da = self
+    op = %w(- <= >=)[step <=> 0]
+    while da.send(op, limit)
+      yield da
+      da += step
+    end
+    self
+  end
+  
+  # Step forward one day at a time until we reach +max+
+  # (inclusive), yielding each date as we go.
+  def upto(max, &block) # :yield: date
+    step(max, +1, &block)
+  end
+  
+  # Step backward one day at a time until we reach +min+
+  # (inclusive), yielding each date as we go.
+  def downto(min, &block) # :yield: date
+    step(min, -1, &block)
+  end
+  
+  def to_s
+    "#{year}-#{month}-#{day}"
+  end
+  
+  def inspect
+    "#<#{self.class.name} #{to_s}>"
   end
   
   private
