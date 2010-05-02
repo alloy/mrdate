@@ -1,11 +1,12 @@
 framework 'Foundation'
+require File.expand_path("../format", __FILE__)
 
 class MRDate < NSDate
   JULIAN_DAY_FORMATTER = NSDateFormatter.new
   JULIAN_DAY_FORMATTER.dateFormat = "g"
   
   GREGORIAN_CALENDAR = NSCalendar.alloc.initWithCalendarIdentifier(NSGregorianCalendar)
-  PARSE_COMPONENTS = NSEraCalendarUnit | NSYearCalendarUnit | NSMonthCalendarUnit |  NSDayCalendarUnit
+  PARSE_COMPONENTS = NSEraCalendarUnit | NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSWeekdayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit
   
   BC = 0
   AD = 1
@@ -14,6 +15,28 @@ class MRDate < NSDate
   #
   # original date.rb constants:
   #
+  
+  # Full month names, in English.  Months count from 1 to 12; a
+  # month's numerical representation indexed into this array
+  # gives the name of that month (hence the first element is nil).
+  MONTHNAMES = [nil] + %w(January February March April May June July
+                          August September October November December)
+
+  # Full names of days of the week, in English.  Days of the week
+  # count from 0 to 6 (except in the commercial week); a day's numerical
+  # representation indexed into this array gives the name of that day.
+  DAYNAMES = %w(Sunday Monday Tuesday Wednesday Thursday Friday Saturday)
+
+  # Abbreviated month names, in English.
+  ABBR_MONTHNAMES = [nil] + %w(Jan Feb Mar Apr May Jun
+                               Jul Aug Sep Oct Nov Dec)
+
+  # Abbreviated day names, in English.
+  ABBR_DAYNAMES = %w(Sun Mon Tue Wed Thu Fri Sat)
+
+  [MONTHNAMES, DAYNAMES, ABBR_MONTHNAMES, ABBR_DAYNAMES].each do |xs|
+    xs.each{|x| x.freeze unless x.nil?}.freeze
+  end
   
   # The Julian Day Number of the Day of Calendar Reform for Italy
   # and the Catholic countries.
@@ -185,10 +208,32 @@ module MRDateAPI
   def month
     components.month
   end
+  alias_method :mon, :month
   
   def day
     components.day
   end
+  alias_method :mday, :day
+  
+  # Get the week day of this date.  Sunday is day-of-week 0;
+  # Saturday is day-of-week 6.
+  def wday
+    components.weekday - 1
+  end
+  
+  def hour
+    components.hour
+  end
+  
+  def minute
+    components.minute
+  end
+  alias_method :min, :minute
+  
+  def second
+    components.second
+  end
+  alias_method :sec, :second
   
   # TODO: lazy bastard
   def jd
@@ -239,27 +284,28 @@ module MRDateAPI
   # String methods
   #
   
-  def strftime(format = '%F')
-    format = format.gsub(/%(C|F|h|n|t)/) do
-      case $1
-      when 'C'
-        year / 100
-      when 'h'
-        '%b'
-      when 'F'
-        '%Y-%m-%d'
-      when 'n'
-        "\n"
-      when 't'
-        "\t"
-      end
-    end
-    # p format
-    
-    descriptionWithCalendarFormat(format, timeZone: nil, locale: nil)
-  end
+  # def strftime(format = '%F')
+  #   format = format.gsub(/%(C|F|h|n|t)/) do
+  #     case $1
+  #     when 'C'
+  #       year / 100
+  #     when 'h'
+  #       '%b'
+  #     when 'F'
+  #       '%Y-%m-%d'
+  #     when 'n'
+  #       "\n"
+  #     when 't'
+  #       "\t"
+  #     end
+  #   end
+  #   # p format
+  #   
+  #   descriptionWithCalendarFormat(format, timeZone: nil, locale: nil)
+  # end
   
   def to_s
+    # "#{year}-#{month}-#{day}"
     strftime
   end
   

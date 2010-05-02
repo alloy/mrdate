@@ -6,7 +6,7 @@ describe "MRDate#strftime" do
     MRDate.civil(2000, 4, 6).strftime.should == "2000-04-06"
     MRDate.civil(2000, 4, 6).strftime.should == MRDate.civil(2000, 4, 6).to_s
   end
-
+  
   it "should be able to print the full day name" do
     MRDate.civil(2000, 4, 6).strftime("%A").should == "Thursday"
   end
@@ -33,11 +33,8 @@ describe "MRDate#strftime" do
     MRDate.civil(2000, 4, 6).strftime("%d").should == "06"
   end
   
-  # it "should be able to print the month day with leading spaces" do
-  #   MRDate.civil(2000, 4, 6).strftime("%e").should == " 6"
-  # end
-  it "should be able to print the month day without leading zeroes" do
-    MRDate.civil(2000, 4, 6).strftime("%e").should == "6"
+  it "should be able to print the month day with leading spaces" do
+    MRDate.civil(2000, 4, 6).strftime("%e").should == " 6"
   end
   
   # it "should be able to print the commercial year with leading zeroes" do
@@ -58,17 +55,17 @@ describe "MRDate#strftime" do
     MRDate.civil(2000, 4, 6).strftime("%I").should == "12"
   end
   
-  it "should be able to print the year day with leading zeroes" do
-    MRDate.civil(2000, 4, 6).strftime("%j").should == "097"
+  # it "should be able to print the year day with leading zeroes" do
+  #   MRDate.civil(2000, 4, 6).strftime("%j").should == "097"
+  # end
+  
+  it "should be able to print the hour in 24 hour notation with leading spaces" do
+    MRDate.civil(2000, 4, 6).strftime("%k").should == " 0"
   end
   
-  # it "should be able to print the hour in 24 hour notation with leading spaces" do
-  #   MRDate.civil(2000, 4, 6).strftime("%k").should == " 0"
-  # end
-  
-  # it "should be able to print the hour in 12 hour notation with leading spaces" do
-  #   MRDate.civil(2000, 4, 6).strftime("%l").should == "12"
-  # end
+  it "should be able to print the hour in 12 hour notation with leading spaces" do
+    MRDate.civil(2000, 4, 6).strftime("%l").should == "12"
+  end
   
   it "should be able to print the minutes with leading zeroes" do
     MRDate.civil(2000, 4, 6).strftime("%M").should == "00"
@@ -82,9 +79,9 @@ describe "MRDate#strftime" do
     MRDate.civil(2000, 4, 6).strftime("%n").should == "\n"
   end
   
-  # it "should be able to show AM/PM" do
-  #   MRDate.civil(2000, 4, 6).strftime("%P").should == "am"
-  # end
+  it "should be able to show AM/PM" do
+    MRDate.civil(2000, 4, 6).strftime("%P").should == "am"
+  end
   
   it "should be able to show am/pm" do
     MRDate.civil(2000, 4, 6).strftime("%p").should == "AM"
@@ -138,12 +135,10 @@ describe "MRDate#strftime" do
     MRDate.civil(2000, 4,  9).strftime("%y").should == "00"
   end
   
-  # TODO: Returns TZ name
   # it "should be able to show the timezone of the date with a : separator" do
   #   MRDate.civil(2000, 4,  9).strftime("%Z").should == "+00:00"
   # end
   
-  # TODO: Uses the current users local TZ
   # it "should be able to show the timezone of the date with a : separator" do
   #   MRDate.civil(2000, 4,  9).strftime("%z").should == "+0000"
   # end
@@ -156,51 +151,50 @@ describe "MRDate#strftime" do
   # Specs that combine stuff #
   ############################
   
-  # it "should be able to print the date in full" do
-  #   MRDate.civil(2000, 4, 6).strftime("%c").should == "Thu Apr  6 00:00:00 2000"
-  #   MRDate.civil(2000, 4, 6).strftime("%c").should == MRDate.civil(2000, 4, 6).strftime('%a %b %e %H:%M:%S %Y')
-  # end
+  it "should be able to print the date in full" do
+    MRDate.civil(2000, 4, 6).strftime("%c").should == "Thu Apr  6 00:00:00 2000"
+    MRDate.civil(2000, 4, 6).strftime("%c").should == MRDate.civil(2000, 4, 6).strftime('%a %b %e %H:%M:%S %Y')
+  end
   
-  # it "should be able to print the date with slashes" do
-  #   MRDate.civil(2000, 4, 6).strftime("%D").should == "04/06/00"
-  #   MRDate.civil(2000, 4, 6).strftime("%D").should == MRDate.civil(2000, 4, 6).strftime('%m/%d/%y')  
-  # end
+  it "should be able to print the date with slashes" do
+    MRDate.civil(2000, 4, 6).strftime("%D").should == "04/06/00"
+    MRDate.civil(2000, 4, 6).strftime("%D").should == MRDate.civil(2000, 4, 6).strftime('%m/%d/%y')  
+  end
   
-  # it "should be able to print the date as YYYY-MM-DD" do
-  #   MRDate.civil(2000, 4, 6).strftime("%F").should == "2000-04-06"
-  #   MRDate.civil(2000, 4, 6).strftime("%F").should == MRDate.civil(2000, 4, 6).strftime('%Y-%m-%d')
-  # end
+  it "should be able to print the date as YYYY-MM-DD" do
+    MRDate.civil(2000, 4, 6).strftime("%F").should == "2000-04-06"
+    MRDate.civil(2000, 4, 6).strftime("%F").should == MRDate.civil(2000, 4, 6).strftime('%Y-%m-%d')
+  end
   
-  # it "should be able to show HH:MM" do
-  #   MRDate.civil(2000, 4, 6).strftime("%R").should == "00:00"
-  #   MRDate.civil(2000, 4, 6).strftime("%R").should == MRDate.civil(2000, 4, 6).strftime('%H:%M')
-  # end
+  it "should be able to show HH:MM" do
+    MRDate.civil(2000, 4, 6).strftime("%R").should == "00:00"
+    MRDate.civil(2000, 4, 6).strftime("%R").should == MRDate.civil(2000, 4, 6).strftime('%H:%M')
+  end
   
-  # it "should be able to show HH:MM:SS AM/PM" do
-  #   MRDate.civil(2000, 4, 6).strftime("%r").should == "12:00:00 AM"
-  #   MRDate.civil(2000, 4, 6).strftime("%r").should == MRDate.civil(2000, 4, 6).strftime('%I:%M:%S %p')
-  # end
+  it "should be able to show HH:MM:SS AM/PM" do
+    MRDate.civil(2000, 4, 6).strftime("%r").should == "12:00:00 AM"
+    MRDate.civil(2000, 4, 6).strftime("%r").should == MRDate.civil(2000, 4, 6).strftime('%I:%M:%S %p')
+  end
   
-  # it "should be able to show HH:MM:SS" do
-  #   MRDate.civil(2000, 4, 6).strftime("%T").should == "00:00:00"
-  #   MRDate.civil(2000, 4, 6).strftime("%T").should == MRDate.civil(2000, 4, 6).strftime('%H:%M:%S')
-  # end
+  it "should be able to show HH:MM:SS" do
+    MRDate.civil(2000, 4, 6).strftime("%T").should == "00:00:00"
+    MRDate.civil(2000, 4, 6).strftime("%T").should == MRDate.civil(2000, 4, 6).strftime('%H:%M:%S')
+  end
   
   # it "should be able to show the commercial week" do
   #   MRDate.civil(2000, 4,  9).strftime("%v").should == " 9-Apr-2000"
   #   MRDate.civil(2000, 4,  9).strftime("%v").should == MRDate.civil(2000, 4,  9).strftime('%e-%b-%Y')
   # end
   
-  # TODO: adds TZ name
-  # it "should be able to show HH:MM:SS" do
-  #   MRDate.civil(2000, 4, 6).strftime("%X").should == "00:00:00"
-  #   MRDate.civil(2000, 4, 6).strftime("%X").should == MRDate.civil(2000, 4, 6).strftime('%H:%M:%S')
-  # end
+  it "should be able to show HH:MM:SS" do
+    MRDate.civil(2000, 4, 6).strftime("%X").should == "00:00:00"
+    MRDate.civil(2000, 4, 6).strftime("%X").should == MRDate.civil(2000, 4, 6).strftime('%H:%M:%S')
+  end
   
-  # it "should be able to show MM/DD/YY" do
-  #   MRDate.civil(2000, 4, 6).strftime("%x").should == "04/06/00"
-  #   MRDate.civil(2000, 4, 6).strftime("%x").should == MRDate.civil(2000, 4, 6).strftime('%m/%d/%y')
-  # end
+  it "should be able to show MM/DD/YY" do
+    MRDate.civil(2000, 4, 6).strftime("%x").should == "04/06/00"
+    MRDate.civil(2000, 4, 6).strftime("%x").should == MRDate.civil(2000, 4, 6).strftime('%m/%d/%y')
+  end
   
   # it "should be able to show a full notation" do
   #   MRDate.civil(2000, 4,  9).strftime("%+").should == "Sun Apr  9 00:00:00 +00:00 2000"
