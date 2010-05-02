@@ -284,24 +284,15 @@ module MRDateAPI
   # String methods
   #
   
-  # def strftime(format = '%F')
-  #   format = format.gsub(/%(C|F|h|n|t)/) do
-  #     case $1
-  #     when 'C'
-  #       year / 100
-  #     when 'h'
-  #       '%b'
-  #     when 'F'
-  #       '%Y-%m-%d'
-  #     when 'n'
-  #       "\n"
-  #     when 't'
-  #       "\t"
-  #     end
+  # TODO: possibly add something like the following, which could be much faster
+  #
+  # alias_method :__original_strftime, :strftime
+  # def strftime(format = '%F', use_ruby_strftime = true)
+  #   if use_ruby_strftime
+  #     __original_strftime(format)
+  #   else
+  #     descriptionWithCalendarFormat(format, timeZone: nil, locale: nil)
   #   end
-  #   # p format
-  #   
-  #   descriptionWithCalendarFormat(format, timeZone: nil, locale: nil)
   # end
   
   def to_s
