@@ -55,6 +55,8 @@ class MRDate < NSDate
   #
   
   class << self
+    # to handle negative values we need to know the last day of the month,
+    # see: http://www.cocoabuilder.com/archive/cocoa/180554-getting-the-last-date-of-the-month.html
     def valid_civil?(year, month, day, sg = ITALY)
       case sg
       when ITALY
@@ -71,6 +73,7 @@ class MRDate < NSDate
     def new(year = -4712, month = 1, day = 1, sg = ITALY)
       # we can catch this here already
       raise ArgumentError, "invalid date" if month > 12
+      
       unless valid_civil?(year, month, day, sg)
         raise ArgumentError, "invalid date, because it falls in the dropped days range of the calendar reform"
       end
