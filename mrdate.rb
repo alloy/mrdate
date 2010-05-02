@@ -100,15 +100,26 @@ class MRDate < NSDate
     
     alias_method :civil, :new
   end
-  
+end
+
+module MRDateAPI
   attr_accessor :sg
   
   def eql?(other)
     compare(other) == NSOrderedSame
   end
+  alias_method :==, :eql?
+  
+  def -(days)
+    raise TypeError, "expected numeric or date" unless days.is_a?(Numeric)
+    
+    offset = NSDateComponents.new
+    offset.day = -days
+    calendar.dateByAddingComponents(offset, toDate: self, options: 0)
+  end
   
   def year
-    components.era == BC ? -(components.year - 1) : components.year
+    components.era == MRDate::BC ? -(components.year - 1) : components.year
   end
   
   def month
@@ -119,9 +130,17 @@ class MRDate < NSDate
     components.day
   end
   
+  def to_s
+    "#{year}-#{month}-#{day}"
+  end
+  
+  def inspect
+    "#<#{self.class.name} #{to_s}>"
+  end
+  
   # TODO: lazy bastard
   def jd
-    JULIAN_DAY_FORMATTER.stringFromDate(self).to_i
+    MRDate::JULIAN_DAY_FORMATTER.stringFromDate(self).to_i
   end
   
   # returns the julian day if it's a date before the specified calendar reform date
@@ -131,7 +150,15 @@ class MRDate < NSDate
   
   private
   
-  def components
-    GREGORIAN_CALENDAR.components(PARSE_COMPONENTS, fromDate: self)
+  def calendar
+    MRDate::GREGORIAN_CALENDAR
   end
+  
+  def components
+    calendar.components(MRDate::PARSE_COMPONENTS, fromDate: self)
+  end
+end
+
+class NSDate
+  include MRDateAPI
 end
