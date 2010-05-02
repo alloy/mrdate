@@ -121,12 +121,10 @@ module MRDateAPI
   def -(x)
     case x
     when Numeric
-      self + -x
-      
+      date_with_offset(-x, :day)
     when NSDate
       components = calendar.components(NSDayCalendarUnit, fromDate: x, toDate: self, options: 0)
       components.day
-      
     else
       raise TypeError, "expected numeric or date"
     end
@@ -142,13 +140,17 @@ module MRDateAPI
   # If +n+ is not a Numeric, a TypeError will be thrown.  In
   # particular, two Dates cannot be added to each other.
   def +(x)
-    if x.is_a?(Numeric)
-      offset = NSDateComponents.new
-      offset.day = x
-      calendar.dateByAddingComponents(offset, toDate: self, options: 0)
-    else
-      raise TypeError, "expected numeric"
-    end
+    date_with_offset(x, :day)
+  end
+  
+  # Return a new Date object that is +n+ months later than
+  # the current one.
+  #
+  # If the day-of-the-month of the current Date is greater
+  # than the last day of the target month, the day-of-the-month
+  # of the returned Date will be the last day of the target month.
+  def >>(n)
+    date_with_offset(n, :month)
   end
   
   # Compare this date with another date.
@@ -202,6 +204,15 @@ module MRDateAPI
   
   def components
     calendar.components(MRDate::PARSE_COMPONENTS, fromDate: self)
+  end
+  
+  # asserts x is a numeric and assigns it to the method type, eg year, month, day
+  def date_with_offset(x, type)
+    raise TypeError, "expected numeric" unless x.is_a?(Numeric)
+    
+    offset = NSDateComponents.new
+    offset.send("#{type}=", x)
+    calendar.dateByAddingComponents(offset, toDate: self, options: 0)
   end
 end
 
