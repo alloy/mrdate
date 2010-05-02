@@ -42,8 +42,7 @@ describe :date_civil, :shared => true do
     lambda { MRDate.send(@method, 2000,  2, 29) }.should_not raise_error(ArgumentError)
 
     lambda { MRDate.send(@method, 1582, 10, 15) }.should_not raise_error(ArgumentError)
-    # TODO: MacRuby doesn't conform, NSDate happily goes back, need to check the implications
-    # lambda { MRDate.send(@method, 1582, 10, 14) }.should raise_error(ArgumentError)
+    lambda { MRDate.send(@method, 1582, 10, 14) }.should raise_error(ArgumentError)
   end
 
   # it "creats a MRDate for different calendar reform dates" do

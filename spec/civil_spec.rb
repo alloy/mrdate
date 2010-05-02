@@ -17,9 +17,11 @@ end
 
 describe "MRDate#valid_civil?" do
   it "should be able to determine if a date is valid" do
-    MRDate.valid_civil?(1582, 10, 14).should == false
+    MRDate.valid_civil?(1582, 10, 4).should == true
+    5.upto(14).each { |day| MRDate.valid_civil?(1582, 10, day).should == false }
     MRDate.valid_civil?(1582, 10, 15).should == true
-    MRDate.valid_civil?(1582, 10, 14, MRDate::ENGLAND).should == true
+    
+    # MRDate.valid_civil?(1582, 10, 14, MRDate::ENGLAND).should == true
   end
 
   # it "should be able to handle negative months and days" do

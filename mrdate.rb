@@ -58,7 +58,9 @@ class MRDate < NSDate
     def valid_civil?(year, month, day, sg = ITALY)
       case sg
       when ITALY
-        year >= 1582 && month >= 10 && day >= 15
+        !(year == 1582 && month == 10 && day > 4 && day < 15)
+      when ENGLAND
+        raise "not dealing with any other reform date than ITALY yet"
       end
     end
     
@@ -66,6 +68,9 @@ class MRDate < NSDate
     def new(year = -4712, month = 1, day = 1, sg = ITALY)
       # we can catch this here already
       raise ArgumentError, "invalid date" if month > 12
+      unless valid_civil?(year, month, day, sg)
+        raise ArgumentError, "invalid date, because it falls in the dropped days range of the calendar reform"
+      end
       
       components = NSDateComponents.new
       components.year = year
