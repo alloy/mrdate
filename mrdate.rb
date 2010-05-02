@@ -103,6 +103,10 @@ class MRDate < NSDate
   
   attr_accessor :sg
   
+  def eql?(other)
+    compare(other) == NSOrderedSame
+  end
+  
   def year
     components.era == BC ? -(components.year - 1) : components.year
   end

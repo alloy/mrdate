@@ -1,4 +1,4 @@
-SPECS = %w{ new civil }
+SPECS = %w{ new civil eql }
 SPEC_COMMAND = "macruby -r #{SPECS.map { |s| "spec/#{s}_spec.rb" }.join(" -r ")} -e \"\""
 
 task :spec do

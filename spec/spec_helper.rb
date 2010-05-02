@@ -15,6 +15,10 @@ class Bacon::Context
     yield unless platform == :macruby
   end
   
+  def eql(object)
+    lambda { |o| o.eql?(object) }
+  end
+  
   def raise_error(type)
     lambda do |block|
       begin
