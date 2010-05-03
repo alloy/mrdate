@@ -192,15 +192,15 @@ module MRTimeAPI
     components.hour
   end
   
-  def minute
+  def min
     components.minute
   end
-  alias_method :min, :minute
+  alias_method :minute, :min
   
-  def second
+  def sec
     components.second
   end
-  alias_method :sec, :second
+  alias_method :second, :sec
   
   def usec
     interval = timeIntervalSince1970
