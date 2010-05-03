@@ -207,6 +207,7 @@ module MRTimeAPI
     decimals = interval - interval.to_i
     (decimals * 1_000_000).round
   end
+  alias_method :tv_usec, :usec
   
   def to_i
     timeIntervalSince1970.round
