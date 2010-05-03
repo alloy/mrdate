@@ -1,3 +1,5 @@
+require File.expand_path('../../fixtures/methods', __FILE__)
+
 describe :time_usec, :shared => true do
   it "returns the microseconds for time" do
     MRTime.at(0).send(@method).should == 0

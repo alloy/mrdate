@@ -213,12 +213,19 @@ module MRTimeAPI
   end
   alias_method :second, :sec
   
+  # TODO: this is hardly professional!
   def usec
     interval = timeIntervalSince1970
     decimals = interval - interval.to_i
     (decimals * 1_000_000).round
   end
   alias_method :tv_usec, :usec
+  
+  # TODO: this is hardly professional!
+  def nsec
+    usec * 1000
+  end
+  alias_method :tv_nsec, :nsec
   
   def to_i
     timeIntervalSince1970.round
