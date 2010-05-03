@@ -1,4 +1,4 @@
-require File.expand_path('../spec_helper', __FILE__)
+require File.expand_path('../../spec_helper', __FILE__)
 
 describe "MRDate#eql?" do
   it "should be able determine equality between date objects" do

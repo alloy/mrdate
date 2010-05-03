@@ -1,6 +1,4 @@
-require 'date' 
-require File.expand_path('../../../spec_helper', __FILE__)
-
+require File.expand_path('../../spec_helper', __FILE__)
 
 describe "MRDate#new_start" do
   it "should convert a date object into another with a new calendar reform" do
