@@ -98,26 +98,33 @@ module MRTimeAPI
   #   compare(other) == NSOrderedSame
   # end
   # alias_method :==, :eql?
+  
+  # call-seq:
+  #    time - other_time => float
+  #    time - numeric    => time
   # 
-  # # If +x+ is a Numeric value, create a new Date object that is
-  # # +x+ days earlier than the current one.
-  # #
-  # # If +x+ is a Date, return the number of days between the
-  # # two dates; or, more precisely, how many days later the current
-  # # date is than +x+.
-  # #
-  # # If +x+ is neither Numeric nor a Date, a TypeError is raised.
-  # def -(x)
-  #   case x
-  #   when Numeric
-  #     date_with_offset(-x, :day)
-  #   when NSDate
-  #     components = calendar.components(NSDayCalendarUnit, fromDate: x, toDate: self, options: 0)
-  #     components.day
-  #   else
-  #     raise TypeError, "expected numeric or date"
-  #   end
-  # end
+  # Difference---Returns a new time that represents the difference
+  # between two times, or subtracts the given number of seconds in
+  # <i>numeric</i> from <i>time</i>.
+  #    
+  #    t = Time.now       #=> 2007-11-19 08:23:10 -0600
+  #    t2 = t + 2592000   #=> 2007-12-19 08:23:10 -0600
+  #    t2 - t             #=> 2592000.0
+  #    t2 - 2592000       #=> 2007-11-19 08:23:10 -0600
+  def -(x)
+    if x.is_a?(NSDate)
+      timeIntervalSinceReferenceDate - x.timeIntervalSinceReferenceDate
+    else
+      unless x.is_a?(Numeric)
+        if x && x.respond_to?(:to_r)
+          x = x.to_r # TODO: maybe we should skip this
+        else
+          raise TypeError
+        end
+      end
+      self.class.dateWithTimeIntervalSinceReferenceDate(timeIntervalSinceReferenceDate - x.to_f)
+    end
+  end
   
   # call-seq:
   #    time + numeric => time
@@ -128,8 +135,6 @@ module MRTimeAPI
   #    t = Time.now         #=> 2007-11-19 08:22:21 -0600
   #    t + (60 * 60 * 24)   #=> 2007-11-20 08:22:21 -0600
   def +(x)
-    # date_with_offset(x, :second)
-    # p timeIntervalSinceReferenceDate + x.to_f
     unless x.is_a?(Numeric)
       if x && x.respond_to?(:to_r)
         x = x.to_r # TODO: maybe we should skip this
