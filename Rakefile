@@ -4,7 +4,8 @@ DATE_SPECS = %w{
 }.map { |f| "date/#{f}" }
 
 TIME_SPECS = %w{
-  initialize now at usec comparison plus minus day mday hour min sec
+  initialize now at usec comparison plus minus day mday wday hour min sec
+  monday tuesday wednesday thursday friday saturday sunday
 }.map { |f| "time/#{f}" }
 
 def spec_command(specs)

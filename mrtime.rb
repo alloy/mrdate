@@ -212,6 +212,88 @@ module MRTimeAPI
     timeIntervalSince1970.round
   end
   
+  ##
+  #
+  # Specific day sugar
+  #
+  
+  # call-seq:
+  #    time.sunday? => true or false
+  # 
+  # Returns <code>true</code> if <i>time</i> represents Sunday.
+  #    
+  #    t = Time.local(1990, 4, 1)       #=> 1990-04-01 00:00:00 -0600
+  #    t.sunday?                        #=> true
+  def sunday?
+    wday == 0
+  end
+  
+  # call-seq:
+  #    time.monday? => true or false
+  # 
+  # Returns <code>true</code> if <i>time</i> represents Monday.
+  # 
+  #    t = Time.local(2003, 8, 4)       #=> 2003-08-04 00:00:00 -0500
+  #    p t.monday?                      #=> true
+  def monday?
+    wday == 1
+  end
+  
+  # call-seq:
+  #    time.tuesday? => true or false
+  # 
+  # Returns <code>true</code> if <i>time</i> represents Tuesday.
+  # 
+  #    t = Time.local(1991, 2, 19)      #=> 1991-02-19 00:00:00 -0600
+  #    p t.tuesday?                     #=> true
+  def tuesday?
+    wday == 2
+  end
+  
+  # call-seq:
+  #    time.wednesday? => true or false
+  # 
+  # Returns <code>true</code> if <i>time</i> represents Wednesday.
+  # 
+  #    t = Time.local(1993, 2, 24)      #=> 1993-02-24 00:00:00 -0600
+  #    p t.wednesday?                   #=> true
+  def wednesday?
+    wday == 3
+  end
+  
+  # call-seq:
+  #    time.thursday? => true or false
+  # 
+  # Returns <code>true</code> if <i>time</i> represents Thursday.
+  # 
+  #    t = Time.local(1995, 12, 21)     #=> 1995-12-21 00:00:00 -0600
+  #    p t.thursday?                    #=> true
+  def thursday?
+    wday == 4
+  end
+  
+  # call-seq:
+  #    time.friday? => true or false
+  # 
+  # Returns <code>true</code> if <i>time</i> represents Friday.
+  # 
+  #    t = Time.local(1987, 12, 18)     #=> 1987-12-18 00:00:00 -0600
+  #    t.friday?                        #=> true
+  def friday?
+    wday == 5
+  end
+  
+  # call-seq:
+  #    time.saturday? => true or false
+  # 
+  # Returns <code>true</code> if <i>time</i> represents Saturday.
+  # 
+  #    t = Time.local(2006, 6, 10)      #=> 2006-06-10 00:00:00 -0500
+  #    t.saturday?                      #=> true
+  def saturday?
+    wday == 6
+  end
+  
   # # TODO: lazy bastard
   # def jd
   #   MRDate::JULIAN_DAY_FORMATTER.stringFromDate(self).to_i
