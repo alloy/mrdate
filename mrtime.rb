@@ -67,17 +67,33 @@ class MRTime < NSDate
       end
     end
   end
-  
-  def to_i
-    timeIntervalSince1970.round
-  end
 end
 
 module MRTimeAPI
-  # include Comparable
+  include Comparable
+  
+  # call-seq:
+  #    time <=> other_time => -1, 0, +1 
   # 
-  # attr_accessor :sg
-  # 
+  # Comparison---Compares <i>time</i> with <i>other_time</i>.
+  #    
+  #    t = Time.now       #=> 2007-11-19 08:12:12 -0600
+  #    t2 = t + 2592000   #=> 2007-12-19 08:12:12 -0600
+  #    t <=> t2           #=> -1
+  #    t2 <=> t           #=> 1
+  #    
+  #    t = Time.now       #=> 2007-11-19 08:13:38 -0600
+  #    t2 = t + 0.1       #=> 2007-11-19 08:13:38 -0600
+  #    t.nsec             #=> 98222999
+  #    t2.nsec            #=> 198222999
+  #    t <=> t2           #=> -1
+  #    t2 <=> t           #=> 1
+  #    t <=> t            #=> 0
+  def <=>(time)
+    # timeIntervalSinceReferenceDate <=> time.timeIntervalSinceReferenceDate if time.is_a?(NSDate)
+    compare(time) if time.is_a?(NSDate)
+  end
+  
   # def eql?(other)
   #   compare(other) == NSOrderedSame
   # end
@@ -102,20 +118,28 @@ module MRTimeAPI
   #     raise TypeError, "expected numeric or date"
   #   end
   # end
+  
+  # call-seq:
+  #    time + numeric => time
   # 
-  # # Return a new Date object that is +n+ days later than the
-  # # current one.
-  # #
-  # # +n+ may be a negative value, in which case the new Date
-  # # is earlier than the current one; however, #-() might be
-  # # more intuitive.
-  # #
-  # # If +n+ is not a Numeric, a TypeError will be thrown.  In
-  # # particular, two Dates cannot be added to each other.
-  # def +(x)
-  #   date_with_offset(x, :day)
-  # end
-  # 
+  # Addition---Adds some number of seconds (possibly fractional) to
+  # <i>time</i> and returns that value as a new time.
+  #    
+  #    t = Time.now         #=> 2007-11-19 08:22:21 -0600
+  #    t + (60 * 60 * 24)   #=> 2007-11-20 08:22:21 -0600
+  def +(x)
+    # date_with_offset(x, :second)
+    # p timeIntervalSinceReferenceDate + x.to_f
+    unless x.is_a?(Numeric)
+      if x && x.respond_to?(:to_r)
+        x = x.to_r # TODO: maybe we should skip this
+      else
+        raise TypeError
+      end
+    end
+    self.class.dateWithTimeIntervalSinceReferenceDate(timeIntervalSinceReferenceDate + x.to_f)
+  end
+  
   # # Return a new Date object that is +n+ months earlier than
   # # the current one.
   # #
@@ -134,19 +158,6 @@ module MRTimeAPI
   # # of the returned Date will be the last day of the target month.
   # def >>(n)
   #   date_with_offset(n, :month)
-  # end
-  # 
-  # # Compare this date with another date.
-  # #
-  # # +other+ can also be a Numeric value, in which case it is
-  # # interpreted as an Astronomical Julian Day Number.
-  # def <=>(x)
-  #   case x
-  #   when Numeric
-  #     jd.compare(x)
-  #   when NSDate
-  #     compare(x)
-  #   end
   # end
   
   BC = 0
@@ -190,6 +201,10 @@ module MRTimeAPI
     interval = timeIntervalSince1970
     decimals = interval - interval.to_i
     (decimals * 1_000_000).round
+  end
+  
+  def to_i
+    timeIntervalSince1970.round
   end
   
   # # TODO: lazy bastard
@@ -274,14 +289,14 @@ module MRTimeAPI
     calendar.components(PARSE_COMPONENTS, fromDate: self)
   end
   
-  # # asserts x is a numeric and assigns it to the method type, eg year, month, day
-  # def date_with_offset(x, type)
-  #   raise TypeError, "expected numeric" unless x.is_a?(Numeric)
-  #   
-  #   offset = NSDateComponents.new
-  #   offset.send("#{type}=", x)
-  #   calendar.dateByAddingComponents(offset, toDate: self, options: 0)
-  # end
+  # asserts x is a numeric and assigns it to the method type, eg year, month, day
+  def date_with_offset(x, type)
+    raise TypeError, "expected numeric" unless x.is_a?(Numeric)
+    
+    offset = NSDateComponents.new
+    offset.send("#{type}=", x)
+    calendar.dateByAddingComponents(offset, toDate: self, options: 0)
+  end
 end
 
 class NSDate
