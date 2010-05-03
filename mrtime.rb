@@ -188,6 +188,17 @@ module MRTimeAPI
     components.weekday - 1
   end
   
+  # call-seq:
+  #    time.yday => fixnum
+  # 
+  # Returns an integer representing the day of the year, 1..366.
+  #    
+  #    t = Time.now   #=> 2007-11-19 08:32:31 -0600
+  #    t.yday         #=> 323
+  def yday
+    calendar.ordinalityOfUnit(NSDayCalendarUnit, inUnit: NSYearCalendarUnit, forDate: self)
+  end
+  
   def hour
     components.hour
   end
