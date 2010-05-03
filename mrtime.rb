@@ -212,6 +212,17 @@ module MRTimeAPI
     timeIntervalSince1970.round
   end
   
+  # call-seq:
+  #   time.succ   => new_time
+  # 
+  # Return a new time object, one second later than <code>time</code>.
+  # 
+  #     t = Time.now       #=> 2007-11-19 08:23:57 -0600
+  #     t.succ             #=> 2007-11-19 08:23:58 -0600
+  def succ
+    self.class.dateWithTimeIntervalSinceReferenceDate(timeIntervalSinceReferenceDate + 1)
+  end
+  
   ##
   #
   # Specific day sugar
