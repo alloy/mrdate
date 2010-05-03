@@ -94,10 +94,10 @@ module MRTimeAPI
     compare(time) if time.is_a?(NSDate)
   end
   
-  # def eql?(other)
-  #   compare(other) == NSOrderedSame
-  # end
-  # alias_method :==, :eql?
+  def eql?(other)
+    compare(other) == NSOrderedSame
+  end
+  alias_method :==, :eql?
   
   # call-seq:
   #    time - other_time => float
