@@ -1,10 +1,10 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 require File.expand_path('../fixtures/methods', __FILE__)
 
-describe "Time#_dump" do
+describe "MRTime#_dump" do
   before :each do
-    @local = Time.at(946812800)
-    @t = Time.at(946812800)
+    @local = MRTime.at(946812800)
+    @t = MRTime.at(946812800)
     @t = @t.gmtime
     @s = @t._dump
   end
@@ -20,7 +20,7 @@ describe "Time#_dump" do
       ((dump >> 30) & 0x1).should == 0
     end
 
-    it "dumps a Time object to a bytestring" do
+    it "dumps a MRTime object to a bytestring" do
       @s.should be_kind_of(String)
       @s.should == [3222863947, 2235564032].pack("VV")
     end

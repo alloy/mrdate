@@ -1,10 +1,10 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 require File.expand_path('../fixtures/methods', __FILE__)
 
-describe "Time#eql?" do
+describe "MRTime#eql?" do
   it "returns true iff time is equal in seconds and usecs to other time" do
-    Time.at(100, 100).should eql(Time.at(100, 100))
-    Time.at(100, 100).should_not eql(Time.at(100, 99))
-    Time.at(100, 100).should_not eql(Time.at(99, 100))
+    MRTime.at(100, 100).should eql(MRTime.at(100, 100))
+    MRTime.at(100, 100).should_not eql(MRTime.at(100, 99))
+    MRTime.at(100, 100).should_not eql(MRTime.at(99, 100))
   end  
 end

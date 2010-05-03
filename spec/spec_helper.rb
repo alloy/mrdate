@@ -1,4 +1,5 @@
-require File.expand_path("../../mrdate", __FILE__)
+# require File.expand_path("../../mrdate", __FILE__)
+require File.expand_path("../../mrtime", __FILE__)
 
 require "rubygems"
 require "bacon"
@@ -14,19 +15,28 @@ class Bacon::Context
   def not_compliant_on(platform)
     yield unless platform == :macruby
   end
+  alias_method :platform_is_not, :not_compliant_on
   
   def eql(object)
     lambda { |o| o.eql?(object) }
   end
   
   def raise_error(type)
-    lambda do |block|
-      begin
-        block.should.raise(type)
-        true
-      rescue Bacon::Error
-        false
-      end
+    lambda { |block| run_assertion { block.should.raise(type) } }
+  end
+  
+  def be_close(actual, delta)
+    lambda { |obj| run_assertion { obj.should.be.close(actual, delta) } }
+  end
+  
+  private
+  
+  def run_assertion
+    begin
+      yield
+      true
+    rescue Bacon::Error
+      false
     end
   end
 end
