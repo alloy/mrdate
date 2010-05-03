@@ -5,5 +5,5 @@ require File.expand_path('../shared/time_params', __FILE__)
 
 describe "MRTime.local" do
   it_behaves_like(:time_local, :local)
-  it_behaves_like(:time_params, :local)
+  # it_behaves_like(:time_params, :local)
 end

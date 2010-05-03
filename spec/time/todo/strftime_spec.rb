@@ -1,4 +1,4 @@
-require File.expand_path('../../../spec_helper', __FILE__)
+require File.expand_path('../../spec_helper', __FILE__)
 require File.expand_path('../fixtures/methods', __FILE__)
 
 describe "MRTime#strftime" do
@@ -155,41 +155,30 @@ describe "MRTime#strftime" do
     time.strftime('%Y').should == '2009'
   end  
 
-  ruby_version_is "1.9" .. "" do
-    it "supports am/pm formatting with %P" do
-      time = MRTime.local(2004, 8, 26, 22, 38, 3)
-      time.strftime('%P').should == 'pm'
-      time = MRTime.local(2004, 8, 26, 11, 38, 3)
-      time.strftime('%P').should == 'am'
-    end
-  end
+  not_compliant_on :macruby do
+    it "supports GNU modificators" do
+      time = MRTime.local(2001, 2, 3, 4, 5, 6)
 
-  ruby_version_is '1.9' do
-    not_compliant_on :macruby do
-      it "supports GNU modificators" do
-        time = MRTime.local(2001, 2, 3, 4, 5, 6)
-  
-        time.strftime('%^h').should == 'FEB'
-        time.strftime('%^_5h').should == '  FEB'
-        time.strftime('%0^5h').should == '00FEB'
-        time.strftime('%04H').should == '0004'
-        time.strftime('%0-^5h').should == 'FEB'
-        time.strftime('%_-^5h').should == 'FEB'
-        time.strftime('%^ha').should == 'FEBa'
-  
-        expected = {
-          "%10h" => '       Feb',
-          "%^10h" => '       FEB',
-          "%_10h" => '       Feb',
-          "%_010h" => '0000000Feb',
-          "%0_10h" => '       Feb',
-          "%0_-10h" => 'Feb',
-          "%0-_10h" => 'Feb'
-        }
-  
-        ["%10h","%^10h","%_10h","%_010h","%0_10h","%0_-10h","%0-_10h"].each do |format|
-          time.strftime(format).should == expected[format]
-        end
+      time.strftime('%^h').should == 'FEB'
+      time.strftime('%^_5h').should == '  FEB'
+      time.strftime('%0^5h').should == '00FEB'
+      time.strftime('%04H').should == '0004'
+      time.strftime('%0-^5h').should == 'FEB'
+      time.strftime('%_-^5h').should == 'FEB'
+      time.strftime('%^ha').should == 'FEBa'
+
+      expected = {
+        "%10h" => '       Feb',
+        "%^10h" => '       FEB',
+        "%_10h" => '       Feb',
+        "%_010h" => '0000000Feb',
+        "%0_10h" => '       Feb',
+        "%0_-10h" => 'Feb',
+        "%0-_10h" => 'Feb'
+      }
+
+      ["%10h","%^10h","%_10h","%_010h","%0_10h","%0_-10h","%0-_10h"].each do |format|
+        time.strftime(format).should == expected[format]
       end
     end
   end

@@ -66,10 +66,66 @@ class MRTime < NSDate
         dateWithTimeIntervalSince1970(interval)
       end
     end
+    
+    # call-seq:
+    #  Time.local(year) => time
+    #  Time.local(year, month) => time
+    #  Time.local(year, month, day) => time
+    #  Time.local(year, month, day, hour) => time
+    #  Time.local(year, month, day, hour, min) => time
+    #  Time.local(year, month, day, hour, min, sec_with_frac) => time
+    #  Time.local(year, month, day, hour, min, sec, usec_with_frac) => time
+    #  Time.local(sec, min, hour, day, month, year, wday, yday, isdst, tz) => time
+    #  Time.mktime(year) => time
+    #  Time.mktime(year, month) => time
+    #  Time.mktime(year, month, day) => time
+    #  Time.mktime(year, month, day, hour) => time
+    #  Time.mktime(year, month, day, hour, min) => time
+    #  Time.mktime(year, month, day, hour, min, sec_with_frac) => time
+    #  Time.mktime(year, month, day, hour, min, sec, usec_with_frac) => time
+    #  Time.mktime(sec, min, hour, day, month, year, wday, yday, isdst, tz) => time
+    # 
+    # Same as <code>Time::gm</code>, but interprets the values in the
+    # local time zone.
+    #    
+    #    Time.local(2000,"jan",1,20,15,1)   #=> 2000-01-01 20:15:01 -0600
+    def local(*args)
+      case args.size
+      when 6
+        year, month, day, hour, min, sec_with_frac = args
+        
+        components = NSDateComponents.new
+        components.year = year
+        components.month = month
+        components.day = day
+        components.hour = hour
+        components.minute = min
+        
+        calendar = NSCalendar.alloc.initWithCalendarIdentifier(NSGregorianCalendar)
+        date = calendar.dateFromComponents(components)
+        
+        date = dateWithTimeIntervalSinceReferenceDate(date.timeIntervalSinceReferenceDate + sec_with_frac)
+        date.timeZone = timeZoneFromEnv
+        date
+      end
+    end
+    
+    private
+    
+    def timeZoneFromEnv
+      zone = ENV['TZ'].match(/^[A-Z]+/)[0]
+      p zone
+      res = NSTimeZone.timeZoneWithAbbreviation(zone)
+      p res
+      res
+    end
   end
 end
 
 module MRTimeAPI
+  # TODO: this should not be visible, I guess
+  attr_accessor :timeZone
+  
   include Comparable
   
   # call-seq:
@@ -236,6 +292,10 @@ module MRTimeAPI
     timeIntervalSince1970
   end
   
+  def to_r
+    
+  end
+  
   # call-seq:
   #   time.succ   => new_time
   # 
@@ -391,6 +451,16 @@ module MRTimeAPI
   
   def to_s
     # TODO this breaks the minus spec: strftime
+    if @timeZone
+      # offset = @timeZone.secondsFromGMT.abs
+      offset = @timeZone.secondsFromGMTForDate(self).abs
+      p offset
+      hours = offset / 3600
+      p hours
+      minutes = hours % 60
+      p minutes
+      
+    end
     format "#{year}-%02d-%02d %02d:%02d:%02d +0200", month, day, hour, minute, second
   end
   alias_method :inspect, :to_s
