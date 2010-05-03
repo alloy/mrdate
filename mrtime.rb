@@ -211,6 +211,7 @@ module MRTimeAPI
   def to_i
     timeIntervalSince1970.round
   end
+  alias_method :tv_sec, :to_i
   
   def to_f
     timeIntervalSince1970
