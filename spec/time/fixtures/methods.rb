@@ -37,13 +37,13 @@ end
 # Returns the given time in the same format as returned by
 # MRTime.at(seconds).inspect on MRI 1.9
 def localtime_19(seconds)
-  platform_is :os => [:darwin, :bsd] do
+  # platform_is :os => [:darwin, :bsd] do
     return `LC_ALL=C /bin/date -r #{seconds} +'%F %H:%M:%S %z'`.chomp
-  end
-
-  platform_is :os => :linux do
-    return `LC_ALL=C date -d @#{seconds} +'%F %H:%M:%S %z'`.chomp
-  end
-
-  return `LC_ALL=C date -j -f "%s" #{seconds} "+%F %H:%M:%S %z"`.chomp
+  # end
+  # 
+  # platform_is :os => :linux do
+  #   return `LC_ALL=C date -d @#{seconds} +'%F %H:%M:%S %z'`.chomp
+  # end
+  # 
+  # return `LC_ALL=C date -j -f "%s" #{seconds} "+%F %H:%M:%S %z"`.chomp
 end

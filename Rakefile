@@ -4,7 +4,7 @@ DATE_SPECS = %w{
 }.map { |f| "date/#{f}" }
 
 TIME_SPECS = %w{
-  initialize
+  initialize now at usec
 }.map { |f| "time/#{f}" }
 
 def spec_command(specs)
