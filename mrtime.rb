@@ -212,6 +212,10 @@ module MRTimeAPI
     timeIntervalSince1970.round
   end
   
+  def to_f
+    timeIntervalSince1970
+  end
+  
   # call-seq:
   #   time.succ   => new_time
   # 
